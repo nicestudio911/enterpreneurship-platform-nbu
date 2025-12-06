@@ -1,21 +1,19 @@
-# Build stage
-FROM maven:3.9-eclipse-temurin-21 as build
+FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY pom.xml .
-RUN mvn dependency:go-offline
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY src ./src
-RUN mvn clean package -DskipTests
+# Copy application code
+COPY app ./app
 
-# Production stage
-FROM eclipse-temurin:21-jre-alpine
+# Create data directory for SQLite database
+RUN mkdir -p /app/data
 
-WORKDIR /app
+# Expose port
+EXPOSE 8000
 
-COPY --from=build /app/target/*.jar app.jar
-
-EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Run the application
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { login } from '../api/auth'
 
 function Login() {
@@ -8,6 +8,15 @@ function Login() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    // Show success message if redirected from signup
+    if (location.state?.message) {
+      // You could show this as a success message instead of error
+      // For now, we'll just clear any existing errors
+    }
+  }, [location])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -52,9 +61,22 @@ function Login() {
           />
         </div>
         {error && <div className="error">{error}</div>}
+        {location.state?.message && (
+          <div style={{ color: 'green', marginBottom: '1rem' }}>{location.state.message}</div>
+        )}
         <button type="submit" disabled={loading}>
           {loading ? 'Logging in...' : 'Login'}
         </button>
+        <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+          <p>Don't have an account?</p>
+          <button 
+            type="button" 
+            onClick={() => navigate('/signup')}
+            style={{ marginTop: '0.5rem' }}
+          >
+            Sign Up
+          </button>
+        </div>
       </form>
     </div>
   )

@@ -1,12 +1,12 @@
 # Entrepreneurship Platform
 
-A full-stack web application for managing entrepreneurship projects, built with React, Spring Boot, and PostgreSQL.
+A full-stack web application for managing entrepreneurship projects, built with React, FastAPI, and SQLite.
 
 ## Architecture
 
 - **Frontend**: React 18 with TypeScript, Vite, and React Router
-- **Backend**: Spring Boot 3.2 with Java 21
-- **Database**: PostgreSQL 16
+- **Backend**: FastAPI with Python 3.11
+- **Database**: SQLite
 - **Containerization**: Docker and Docker Compose
 
 ## Project Structure
@@ -24,15 +24,18 @@ A full-stack web application for managing entrepreneurship projects, built with 
 │   ├── nginx.conf           # Nginx configuration for production
 │   └── package.json         # Frontend dependencies
 │
-├── backend/                 # Spring Boot backend application
-│   ├── src/main/java/com/entrepreneurship/platform/
-│   │   ├── controller/      # REST API controllers
-│   │   ├── service/         # Business logic layer
-│   │   ├── repository/      # Data access layer
-│   │   ├── model/entity/    # JPA entities
-│   │   └── config/          # Application configuration
+├── backend/                 # FastAPI backend application
+│   ├── app/
+│   │   ├── routers/         # API route handlers
+│   │   ├── services/        # Business logic layer
+│   │   ├── repositories/    # Data access layer
+│   │   ├── models/          # SQLAlchemy models
+│   │   ├── database.py      # Database configuration
+│   │   └── main.py          # FastAPI application entry point
+│   ├── data/                # SQLite database storage
 │   ├── Dockerfile           # Backend Docker configuration
-│   └── pom.xml              # Maven dependencies
+│   ├── requirements.txt     # Python dependencies
+│   └── README.md            # Backend documentation
 │
 └── docker-compose.yml       # Docker Compose configuration
 
@@ -45,7 +48,7 @@ A full-stack web application for managing entrepreneurship projects, built with 
 - User authentication (mock implementation)
 - Project listing
 - Project creation
-- PostgreSQL database integration
+- SQLite database integration
 - RESTful API endpoints
 - Responsive UI with React Router
 
@@ -77,14 +80,14 @@ docker compose up --build
 
 This command will:
 - Build the frontend and backend Docker images
-- Start the PostgreSQL database
-- Start the Spring Boot backend
+- Start the FastAPI backend
 - Start the React frontend with Nginx
+- Initialize SQLite database automatically
 
 3. Access the application:
 - **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:8080/api
-- **Database**: localhost:5432
+- **Backend API**: http://localhost:8000/api
+- **API Documentation**: http://localhost:8000/docs (FastAPI auto-generated docs)
 
 ### Stopping the Application
 
@@ -118,35 +121,35 @@ To run the backend locally:
 
 ```bash
 cd backend
-mvn spring-boot:run
+pip install -r requirements.txt
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Make sure PostgreSQL is running and accessible at localhost:5432.
+The SQLite database will be created automatically in the `data/` directory.
 
 ### Environment Variables
 
 #### Frontend (.env)
 ```
-VITE_API_URL=http://localhost:8080/api
+VITE_API_URL=http://localhost:8000/api
 ```
 
-#### Backend (application.properties)
+#### Backend
+```bash
+export DATABASE_URL=sqlite:///./data/app.db
 ```
-SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/appdb
-SPRING_DATASOURCE_USERNAME=app
-SPRING_DATASOURCE_PASSWORD=app
-```
+
+Note: The `DATABASE_URL` defaults to `sqlite:///./data/app.db` if not set. The database file will be created automatically.
 
 ## Database
 
-The PostgreSQL database is automatically initialized when you run `docker compose up`. The schema is created automatically by Spring Boot JPA based on the entity definitions.
+The application uses SQLite, which is a file-based database. The database file is automatically created when you run the application for the first time.
 
-### Database Credentials (Development)
-- **Host**: localhost
-- **Port**: 5432
-- **Database**: appdb
-- **Username**: app
-- **Password**: app
+### Database Location
+- **Local Development**: `backend/data/app.db`
+- **Docker**: The database file is persisted in `backend/data/` directory (mounted as a volume)
+
+The database schema is automatically created by SQLAlchemy based on the model definitions when the application starts.
 
 ## Technology Stack
 
@@ -159,16 +162,16 @@ The PostgreSQL database is automatically initialized when you run `docker compos
 - Nginx (for production)
 
 ### Backend
-- Java 21
-- Spring Boot 3.2
-- Spring Data JPA
-- PostgreSQL Driver
-- Maven
+- Python 3.11
+- FastAPI 0.104
+- SQLAlchemy 2.0
+- Uvicorn (ASGI server)
+- Pydantic (data validation)
 
 ### Infrastructure
 - Docker
 - Docker Compose
-- PostgreSQL 16
+- SQLite (file-based database)
 
 ## Project Status
 

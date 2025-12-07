@@ -4,8 +4,10 @@ from typing import List
 from pydantic import BaseModel
 from datetime import datetime
 from app.database import get_db
+from app.dependencies import get_current_user
 from app.services.project_service import ProjectService
 from app.models.project import Project
+from app.models.user import User
 
 router = APIRouter(prefix="/api/projects", tags=["projects"])
 
@@ -36,23 +38,34 @@ class ProjectResponse(BaseModel):
 
 
 @router.get("", response_model=List[ProjectResponse])
-def get_all_projects(db: Session = Depends(get_db)):
+def get_all_projects(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     project_service = ProjectService(db)
-    projects = project_service.get_all_projects()
+    projects = project_service.get_all_projects_by_user(current_user.id)
     return projects
 
 
 @router.get("/{project_id}", response_model=ProjectResponse)
-def get_project(project_id: int, db: Session = Depends(get_db)):
+def get_project(
+    project_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     project_service = ProjectService(db)
-    project = project_service.get_project_by_id(project_id)
+    project = project_service.get_project_by_id(project_id, current_user.id)
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
     return project
 
 
 @router.post("", response_model=ProjectResponse)
-def create_project(project_data: ProjectCreate, db: Session = Depends(get_db)):
+def create_project(
+    project_data: ProjectCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     # Validate required fields
     if not project_data.name or not project_data.name.strip():
         raise HTTPException(status_code=400, detail="Project name is required")
@@ -64,16 +77,22 @@ def create_project(project_data: ProjectCreate, db: Session = Depends(get_db)):
         name=project_data.name.strip(),
         description=project_data.description,
         competition_id=project_data.competition_id,
-        idea_description=project_data.idea_description.strip()
+        idea_description=project_data.idea_description.strip(),
+        user_id=current_user.id
     )
     saved_project = project_service.create_project(project)
     return saved_project
 
 
 @router.put("/{project_id}", response_model=ProjectResponse)
-def update_project(project_id: int, project_data: ProjectUpdate, db: Session = Depends(get_db)):
+def update_project(
+    project_id: int,
+    project_data: ProjectUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     project_service = ProjectService(db)
-    project = project_service.get_project_by_id(project_id)
+    project = project_service.get_project_by_id(project_id, current_user.id)
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
     
@@ -90,13 +109,17 @@ def update_project(project_id: int, project_data: ProjectUpdate, db: Session = D
 
 
 @router.delete("/{project_id}")
-def delete_project(project_id: int, db: Session = Depends(get_db)):
+def delete_project(
+    project_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     """Delete a project and all associated files"""
     from app.repositories.file_repository import FileRepository
     from app.repositories.log_repository import LogRepository
     
     project_service = ProjectService(db)
-    project = project_service.get_project_by_id(project_id)
+    project = project_service.get_project_by_id(project_id, current_user.id)
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
     

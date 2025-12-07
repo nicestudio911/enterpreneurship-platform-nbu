@@ -7,11 +7,17 @@ class ProjectRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def find_all(self) -> List[Project]:
-        return self.db.query(Project).all()
+    def find_all_by_user(self, user_id: int) -> List[Project]:
+        return self.db.query(Project).filter(Project.user_id == user_id).all()
 
     def find_by_id(self, project_id: int) -> Optional[Project]:
         return self.db.query(Project).filter(Project.id == project_id).first()
+
+    def find_by_id_and_user(self, project_id: int, user_id: int) -> Optional[Project]:
+        return self.db.query(Project).filter(
+            Project.id == project_id,
+            Project.user_id == user_id
+        ).first()
 
     def save(self, project: Project) -> Project:
         self.db.add(project)

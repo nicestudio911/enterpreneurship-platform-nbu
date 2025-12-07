@@ -61,10 +61,32 @@ apiClient.interceptors.request.use((config) => {
   return Promise.reject(error)
 })
 
-// Add response interceptor for better error logging
+// Add response interceptor for better error logging and 401 handling
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Check for 401 Unauthorized even in successful responses (due to validateStatus)
+    if (response.status === 401) {
+      // Clear invalid token
+      localStorage.removeItem('token')
+      localStorage.removeItem('username')
+      // Redirect to login
+      if (window.location.pathname !== '/login' && window.location.pathname !== '/signup') {
+        window.location.href = '/login'
+      }
+      return Promise.reject(new Error('Unauthorized: Invalid or expired token'))
+    }
+    return response
+  },
   (error) => {
+    // Handle 401 errors from network errors or other cases
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('username')
+      if (window.location.pathname !== '/login' && window.location.pathname !== '/signup') {
+        window.location.href = '/login'
+      }
+    }
+    
     console.error('API Error:', {
       message: error.message,
       url: error.config?.url,

@@ -1,40 +1,40 @@
 /* Design System - CSS Variables */
 :root {
-  /* Colors - Primary Palette */
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-primary-light: #3b82f6;
-  --color-primary-dark: #1e40af;
+  /* Colors - Primary Palette (Blue from InnovateX logo) */
+  --color-primary: #2563EB;
+  --color-primary-hover: #1D4ED8;
+  --color-primary-light: #3B82F6;
+  --color-primary-dark: #1E40AF;
   
   /* Colors - Secondary Palette */
-  --color-secondary: #64748b;
+  --color-secondary: #64748B;
   --color-secondary-hover: #475569;
-  --color-secondary-light: #94a3b8;
+  --color-secondary-light: #94A3B8;
   
   /* Colors - Semantic */
-  --color-success: #10b981;
+  --color-success: #10B981;
   --color-success-hover: #059669;
-  --color-warning: #f59e0b;
-  --color-warning-hover: #d97706;
-  --color-danger: #ef4444;
-  --color-danger-hover: #dc2626;
-  --color-info: #06b6d4;
-  --color-info-hover: #0891b2;
+  --color-warning: #F59E0B;
+  --color-warning-hover: #D97706;
+  --color-danger: #EF4444;
+  --color-danger-hover: #DC2626;
+  --color-info: #06B6D4;
+  --color-info-hover: #0891B2;
   
-  /* Colors - Neutral */
-  --color-text-primary: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-tertiary: #94a3b8;
+  /* Colors - Neutral (Light Gray background from InnovateX logo) */
+  --color-text-primary: #1F2937;
+  --color-text-secondary: #4B5563;
+  --color-text-tertiary: #6B7280;
   --color-text-inverse: #ffffff;
   
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f8fafc;
-  --color-bg-tertiary: #f1f5f9;
-  --color-bg-dark: #1e293b;
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #F3F4F6;
+  --color-bg-tertiary: #E5E7EB;
+  --color-bg-dark: #1F2937;
   
-  --color-border: #e2e8f0;
-  --color-border-hover: #cbd5e1;
-  --color-border-focus: #2563eb;
+  --color-border: #D1D5DB;
+  --color-border-hover: #9CA3AF;
+  --color-border-focus: #2563EB;
   
   /* Spacing Scale */
   --spacing-xs: 0.25rem;   /* 4px */

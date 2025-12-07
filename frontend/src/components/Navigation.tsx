@@ -1,4 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import Logo from './Logo'
 import './Navigation.css'
 
 function Navigation() {
@@ -21,7 +22,9 @@ function Navigation() {
     <nav className="main-navigation">
       <div className="nav-container">
         <div className="nav-brand">
-          <Link to="/dashboard">Entrepreneurship Platform</Link>
+          <Link to="/dashboard" className="brand-link">
+            <Logo className="logo-white" />
+          </Link>
         </div>
         <div className="nav-links">
           <Link to="/dashboard" className={location.pathname === '/dashboard' ? 'active' : ''}>

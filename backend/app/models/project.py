@@ -11,11 +11,13 @@ class Project(Base):
     description = Column(Text)  # Changed to Text for longer idea descriptions
     competition_id = Column(Integer, ForeignKey("competitions.id"), nullable=True)
     idea_description = Column(Text)  # The detailed idea description
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
 
-    def __init__(self, name: str = None, description: str = None, competition_id: int = None, idea_description: str = None):
+    def __init__(self, name: str = None, description: str = None, competition_id: int = None, idea_description: str = None, user_id: int = None):
         self.name = name
         self.description = description
         self.competition_id = competition_id
         self.idea_description = idea_description
+        self.user_id = user_id
 

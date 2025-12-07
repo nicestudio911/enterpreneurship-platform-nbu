@@ -1,0 +1,46 @@
+.logo-svg {
+  display: block;
+  height: auto;
+  width: 100%;
+  max-width: 200px;
+}
+
+/* Default colors - blue for light backgrounds */
+.logo-svg .logo-x-stroke {
+  stroke: var(--color-primary);
+}
+
+.logo-svg .logo-x-stroke-center {
+  stroke: var(--color-primary-dark);
+}
+
+.logo-svg .logo-text {
+  fill: var(--color-text-primary);
+}
+
+/* White variant for dark backgrounds (navigation) */
+.logo-svg.logo-white .logo-x-stroke {
+  stroke: var(--color-text-inverse);
+}
+
+.logo-svg.logo-white .logo-x-stroke-center {
+  stroke: rgba(255, 255, 255, 0.9);
+}
+
+.logo-svg.logo-white .logo-text {
+  fill: var(--color-text-inverse);
+}
+
+/* Blue variant for light backgrounds (login/signup) */
+.logo-svg.logo-blue .logo-x-stroke {
+  stroke: var(--color-primary);
+}
+
+.logo-svg.logo-blue .logo-x-stroke-center {
+  stroke: var(--color-primary-dark);
+}
+
+.logo-svg.logo-blue .logo-text {
+  fill: var(--color-primary);
+}
+

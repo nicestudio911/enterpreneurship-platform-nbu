@@ -8,14 +8,14 @@ class ProjectService:
     def __init__(self, db: Session):
         self.project_repository = ProjectRepository(db)
 
-    def get_all_projects(self) -> List[Project]:
-        return self.project_repository.find_all()
+    def get_all_projects_by_user(self, user_id: int) -> List[Project]:
+        return self.project_repository.find_all_by_user(user_id)
 
     def create_project(self, project: Project) -> Project:
         return self.project_repository.save(project)
 
-    def get_project_by_id(self, project_id: int) -> Optional[Project]:
-        return self.project_repository.find_by_id(project_id)
+    def get_project_by_id(self, project_id: int, user_id: int) -> Optional[Project]:
+        return self.project_repository.find_by_id_and_user(project_id, user_id)
 
     def update_project(self, project: Project) -> Project:
         return self.project_repository.save(project)

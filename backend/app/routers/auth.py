@@ -37,7 +37,10 @@ class RegisterResponse(BaseModel):
 @router.post("/login", response_model=LoginResponse)
 def login(credentials: LoginRequest, db: Session = Depends(get_db)):
     auth_service = AuthService(db)
-    token = auth_service.login(credentials.username, credentials.password)
+    try:
+        token = auth_service.login(credentials.username, credentials.password)
+    except ValueError as e:
+        raise HTTPException(status_code=401, detail=str(e))
     
     return LoginResponse(
         token=token,

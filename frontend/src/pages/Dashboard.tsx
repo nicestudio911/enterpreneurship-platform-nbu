@@ -26,8 +26,14 @@ function Dashboard() {
     try {
       const data = await getProjects()
       setProjects(data)
-    } catch (err) {
-      setError('Failed to load projects')
+    } catch (err: any) {
+      // Check if it's an authentication error (401 will be handled by interceptor)
+      if (err.response?.status === 401 || err.message?.includes('Unauthorized')) {
+        // Interceptor should handle redirect, but ensure we don't show error
+        setLoading(false)
+        return
+      }
+      setError('Failed to load projects. Please try again.')
       console.error('Error loading projects:', err)
     } finally {
       setLoading(false)

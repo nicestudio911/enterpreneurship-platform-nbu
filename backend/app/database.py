@@ -43,5 +43,6 @@ def init_db():
     from app.models.competition import Competition
     from app.models.generated_file import GeneratedFile
     from app.models.generation_log import GenerationLog
+    from app.models.token import Token
     Base.metadata.create_all(bind=engine)
 
